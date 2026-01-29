@@ -1,0 +1,10 @@
+# Build outputs
+/ssg
+/dist/
+
+# Cache
+/.cache/
+
+# Go
+*.test
+*.out
