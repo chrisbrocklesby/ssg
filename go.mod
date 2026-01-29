@@ -1,4 +1,4 @@
-module ssg
+module github.com/chrisbrocklesby/ssg
 
 go 1.25.5
 

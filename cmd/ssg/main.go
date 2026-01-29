@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"ssg/internal/cli"
+	"github.com/chrisbrocklesby/ssg/internal/cli"
 )
 
 func main() {

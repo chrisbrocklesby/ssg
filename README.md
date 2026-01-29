@@ -20,7 +20,7 @@ go build -o ~/bin/ssg ./cmd/ssg
 
 Make sure `~/bin` is on your `PATH`.
 
-> If you later publish this repo under a real module path (e.g. `github.com/you/ssg`), you can also use `go install github.com/you/ssg@latest`.
+> You can also use `go install github.com/chrisbrocklesby/ssg/cmd/ssg@latest`.
 
 ## Use as a Go package
 

@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"time"
 
-	"ssg/internal/ssg"
+	"github.com/chrisbrocklesby/ssg/internal/ssg"
 )
 
 func buildCmd(args []string) error {

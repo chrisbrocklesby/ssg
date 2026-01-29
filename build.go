@@ -3,7 +3,7 @@ package ssg
 import (
 	"context"
 
-	impl "ssg/internal/ssg"
+	impl "github.com/chrisbrocklesby/ssg/internal/ssg"
 )
 
 // Build runs a single site build.

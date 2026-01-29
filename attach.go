@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	impl "ssg/internal/ssg"
+	impl "github.com/chrisbrocklesby/ssg/internal/ssg"
 )
 
 // Attach mounts SSG's dev site + live reload endpoints into an existing mux.

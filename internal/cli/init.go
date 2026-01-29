@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"ssg/internal/ssg"
+	"github.com/chrisbrocklesby/ssg/internal/ssg"
 )
 
 func initCmd(args []string) error {

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"ssg/internal/ssg"
+	"github.com/chrisbrocklesby/ssg/internal/ssg"
 )
 
 func Main(args []string) int {
