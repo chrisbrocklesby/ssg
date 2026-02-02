@@ -64,6 +64,19 @@ func Build(c Config) error {
 	}
 	sort.Strings(pageFiles)
 
+	var styleAcc *inlineStyleAccumulator
+	pageOrder := map[string]int{}
+	if c.ExtractInlineStyles {
+		for i, p := range pageFiles {
+			pageOrder[p] = i
+		}
+		outRel := strings.TrimSpace(c.ExtractInlineStylesOut)
+		if outRel == "" {
+			outRel = "css/inline.css"
+		}
+		styleAcc = newInlineStyleAccumulator(outRel)
+	}
+
 	expected, err := expectedOutFiles(c, pagesRoot, pageFiles, baseURL)
 	if err != nil {
 		return err
@@ -105,7 +118,13 @@ func Build(c Config) error {
 			if hadErr.Load() {
 				continue
 			}
-			if err := buildOnePage(base, baseNames, fc, site, data, baseURL, pagesRoot, c.Out, job.pagePath, job.rel, &sitemapEntries, &smMu); err != nil {
+			order := 0
+			if styleAcc != nil {
+				if v, ok := pageOrder[job.pagePath]; ok {
+					order = v
+				}
+			}
+			if err := buildOnePage(base, baseNames, fc, site, data, baseURL, pagesRoot, c.Out, job.pagePath, job.rel, order, styleAcc, &sitemapEntries, &smMu); err != nil {
 				firstErrOnce.Do(func() { firstErr = err })
 				hadErr.Store(true)
 				stopOnce.Do(func() { close(stop) })
@@ -135,6 +154,12 @@ sendLoop:
 		return firstErr
 	}
 
+	if styleAcc != nil {
+		if err := styleAcc.WriteMerged(c.Out); err != nil {
+			return err
+		}
+	}
+
 	if baseURL != "" && len(sitemapEntries) > 0 {
 		sort.Slice(sitemapEntries, func(i, j int) bool { return sitemapEntries[i].Loc < sitemapEntries[j].Loc })
 		if err := writeSitemap(filepath.Join(c.Out, "sitemap.xml"), sitemapEntries); err != nil {
@@ -159,6 +184,8 @@ func buildOnePage(
 	outDir string,
 	pagePath string,
 	rel string,
+	order int,
+	styleAcc *inlineStyleAccumulator,
 	sitemapEntries *[]sitemapEntry,
 	smMu *sync.Mutex,
 ) error {
@@ -250,10 +277,23 @@ func buildOnePage(
 		}
 	}
 
+	outBytes := buf.Bytes()
+	if styleAcc != nil && strings.HasSuffix(strings.ToLower(outFile), ".html") {
+		var extracted []string
+		outBytes, extracted = extractInlineStyleTags(outBytes)
+		if len(extracted) > 0 {
+			for _, css := range extracted {
+				styleAcc.Add(order, rel, css)
+			}
+			href := styleAcc.PageHref(outDir, outFile)
+			outBytes = injectStylesheetLink(outBytes, href)
+		}
+	}
+
 	if err := os.MkdirAll(filepath.Dir(outFile), 0o755); err != nil {
 		return err
 	}
-	if err := os.WriteFile(outFile, buf.Bytes(), 0o644); err != nil {
+	if err := os.WriteFile(outFile, outBytes, 0o644); err != nil {
 		return err
 	}
 

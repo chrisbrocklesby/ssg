@@ -40,6 +40,13 @@ type Options struct {
 	// DevPrefix mounts dev endpoints (SSE + reload script) under this URL path prefix.
 	// Defaults to "/_ssg/".
 	DevPrefix string
+
+	// ExtractInlineStyles extracts <style>...</style> blocks from generated HTML pages,
+	// writes them to a single merged CSS file, and replaces them with a stylesheet link.
+	ExtractInlineStyles bool
+	// ExtractInlineStylesOut is the output path relative to Out for the merged CSS.
+	// Defaults to "css/inline.css" when ExtractInlineStyles is true.
+	ExtractInlineStylesOut string
 }
 
 func (o Options) withDefaultsForAttach() Options {
@@ -79,6 +86,9 @@ func (o Options) withDefaultsForAttach() Options {
 	}
 	if out.DevPrefix == "" {
 		out.DevPrefix = "/_ssg/"
+	}
+	if out.ExtractInlineStyles && out.ExtractInlineStylesOut == "" {
+		out.ExtractInlineStylesOut = "css/inline.css"
 	}
 	return out
 }

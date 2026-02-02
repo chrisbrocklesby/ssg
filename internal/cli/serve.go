@@ -18,6 +18,8 @@ func serveCmd(args []string) error {
 	clean := fs.Bool("clean", false, "clean output dir")
 	fetchTTL := fs.Duration("fetch-ttl", 1*time.Hour, "fetch cache TTL")
 	jobs := fs.Int("jobs", runtime.NumCPU(), "parallel workers")
+	extractStyles := fs.Bool("extract-inline-styles", false, "extract <style> blocks from generated HTML into one merged CSS file")
+	extractStylesOut := fs.String("inline-styles-out", "css/inline.css", "merged CSS output path relative to -out (used with -extract-inline-styles)")
 
 	addr := fs.String("addr", ":8080", "listen address")
 	watch := fs.Bool("watch", false, "watch src and rebuild")
@@ -33,6 +35,9 @@ func serveCmd(args []string) error {
 		Clean:    *clean,
 		FetchTTL: *fetchTTL,
 		Jobs:     max(1, *jobs),
+
+		ExtractInlineStyles:    *extractStyles,
+		ExtractInlineStylesOut: *extractStylesOut,
 	}
 
 	return ssg.Serve(ssg.ServeConfig{Config: c, Addr: *addr, Watch: *watch, Interval: *interval})

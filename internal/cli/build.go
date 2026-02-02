@@ -22,6 +22,8 @@ func parseBuildFlags(name string, args []string) ssg.Config {
 	clean := fs.Bool("clean", false, "clean output dir")
 	fetchTTL := fs.Duration("fetch-ttl", 1*time.Hour, "fetch cache TTL (e.g. 0s, 10m, 1h)")
 	jobs := fs.Int("jobs", runtime.NumCPU(), "number of parallel page workers")
+	extractStyles := fs.Bool("extract-inline-styles", false, "extract <style> blocks from generated HTML into one merged CSS file")
+	extractStylesOut := fs.String("inline-styles-out", "css/inline.css", "merged CSS output path relative to -out (used with -extract-inline-styles)")
 	_ = fs.Parse(args)
 
 	j := *jobs
@@ -37,5 +39,8 @@ func parseBuildFlags(name string, args []string) ssg.Config {
 		Clean:    *clean,
 		FetchTTL: *fetchTTL,
 		Jobs:     j,
+
+		ExtractInlineStyles:    *extractStyles,
+		ExtractInlineStylesOut: *extractStylesOut,
 	}
 }
