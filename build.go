@@ -19,9 +19,6 @@ func Build(ctx context.Context, opts Options) error {
 		Clean:    opts.Clean,
 		FetchTTL: opts.FetchTTL,
 		Jobs:     opts.Jobs,
-
-		ExtractInlineStyles:    opts.ExtractInlineStyles,
-		ExtractInlineStylesOut: opts.ExtractInlineStylesOut,
 	}
 	return impl.Build(cfg)
 }

@@ -11,13 +11,6 @@ import (
 
 func expectedOutFiles(c Config, pagesRoot string, pageFiles []string, baseURL string) (map[string]struct{}, error) {
 	expected := map[string]struct{}{}
-	if c.ExtractInlineStyles {
-		outRel := strings.TrimSpace(c.ExtractInlineStylesOut)
-		if outRel == "" {
-			outRel = "css/inline.css"
-		}
-		expected[filepath.Clean(filepath.Join(c.Out, filepath.FromSlash(outRel)))] = struct{}{}
-	}
 
 	staticDir := filepath.Join(c.Src, "static")
 	if info, err := os.Stat(staticDir); err == nil && info.IsDir() {

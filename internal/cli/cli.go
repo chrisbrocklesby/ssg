@@ -47,12 +47,10 @@ func usage() error {
 Commands:
   ssg init <projectDir>
 
-	ssg build [-src ./src] [-out ./dist] [-cache ./.cache] [-nocache] [-clean] [-fetch-ttl 1h] [-jobs N]
-					 [-extract-inline-styles] [-inline-styles-out css/inline.css]
+  ssg build [-src ./src] [-out ./dist] [-cache ./.cache] [-nocache] [-clean] [-fetch-ttl 1h] [-jobs N]
 
   ssg serve [-src ./src] [-out ./dist] [-cache ./.cache] [-nocache] [-clean] [-fetch-ttl 1h] [-jobs N]
            [-addr :8080] [-watch] [-interval 500ms]
-					 [-extract-inline-styles] [-inline-styles-out css/inline.css]
 
 Pages:
   - Templates under src/pages can be:
